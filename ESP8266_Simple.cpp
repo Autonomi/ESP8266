@@ -29,96 +29,77 @@
 #include "ESP8266_Serial.h"
 
 #if ESP8266_SERIALMODE == ESP8266_SOFTWARESERIAL
-ESP8266_Simple::ESP8266_Simple(short rxPin, short txPin)
-{
-  // this->espSerial = new SoftwareSerial(rxPin,txPin);
-  this->espSerial = new ESP8266_Serial(rxPin,txPin);
-  this->generalCommandTimeoutMicroseconds = 2000000;
+ESP8266_Simple::ESP8266_Simple(short rxPin, short txPin) {
+    // this->espSerial = new SoftwareSerial(rxPin,txPin);
+    this->espSerial = new ESP8266_Serial(rxPin,txPin);
+    this->generalCommandTimeoutMicroseconds = 2000000;
 }
 #endif
 
 #if ESP8266_SERIALMODE == ESP8266_HARDWARESERIAL
-ESP8266_Simple::ESP8266_Simple()
-{
-  this->espSerial = &Serial;
-  this->generalCommandTimeoutMicroseconds = 2000000;
+ESP8266_Simple::ESP8266_Simple() {
+    this->espSerial = &Serial;
+    this->generalCommandTimeoutMicroseconds = 2000000;
 }
 #endif
 
 /** Connect to ESP8266 Device */
-byte ESP8266_Simple::begin(long baudRate)
-{  
-  this->espSerial->begin(baudRate);  
-  return ESP8266_OK;
+byte ESP8266_Simple::begin(long baudRate) {
+    this->espSerial->begin(baudRate);
+    return ESP8266_OK;
 }
 
-byte ESP8266_Simple::setupAsWifiStation(const char *SSID, const char *Password, Print *debugPrinter)
-{
-  if(!strlen(SSID) || !strlen(Password))
-  {
-    if(debugPrinter)
-    {
-      debugPrinter->println(F("Missing SSID/Password, see sketch #defines."));
-      while(1);
-    }
-  }
-    
-  byte responseCode;
-  
-  // Reset the ESP8266 Device (soft reset)
-  do
-  { // Keep trying to reset until it works
-    if(debugPrinter)
-    {
-      debugPrinter->print(F("Reset: "));
+byte ESP8266_Simple::setupAsWifiStation(
+    const char *SSID,
+    const char *Password,
+    Print *debugPrinter) {
+
+    if(!strlen(SSID) || !strlen(Password)) {
+        if(debugPrinter) {
+            debugPrinter->println(F("Missing SSID/Password, see sketch #defines."));
+            while(1);
+        }
     }
     
-    responseCode = this->reset();
-    if(responseCode == ESP8266_OK)
-    {
-      if(debugPrinter)
-      {
-        debugPrinter->println("OK");
-      }
-    }
-    else
-    {
-      if(debugPrinter)
-      {
-        this->debugPrintError(responseCode, debugPrinter);      
-      }
-      delay(1000);
-    }
-  } while(responseCode != ESP8266_OK);
+    byte responseCode;
   
+    do {
+        if(debugPrinter){
+            debugPrinter->print(F("Reset: "));
+        }
+        responseCode = this->reset();
+
+        if(responseCode == ESP8266_OK) {
+            if(debugPrinter) {
+                debugPrinter->println("OK");
+            }
+        }
+        else {
+            if(debugPrinter) {
+                this->debugPrintError(responseCode, debugPrinter);      
+            }
+            delay(1000);
+        }
+    } while(responseCode != ESP8266_OK);
+
+    do {
+        if(debugPrinter) {
+            debugPrinter->print(F("Connect: "));
+        }
+        responseCode = this->connectToWifi(SSID,Password);
+        if(responseCode == ESP8266_OK) {
+            if(debugPrinter) {
+                debugPrinter->println(F("OK"));
+            }              
+        }
+        else {
+            if(debugPrinter) {
+                this->debugPrintError(responseCode, debugPrinter);      
+            }
+            delay(1000);
+        }
+    } while(responseCode != ESP8266_OK);
   
-  
-  // Connect To The Wifi Network
-  do
-  { // Keep trying to connect  until it works
-    if(debugPrinter)
-    {
-      debugPrinter->print(F("Connect: "));
-    }
-    responseCode = this->connectToWifi(SSID,Password);
-    if(responseCode == ESP8266_OK)
-    {
-      if(debugPrinter)
-      {
-        debugPrinter->println(F("OK"));
-      }              
-    }
-    else
-    {
-      if(debugPrinter)
-      {
-        this->debugPrintError(responseCode, debugPrinter);      
-      }
-      delay(1000);
-    }
-  } while(responseCode != ESP8266_OK);
-  
-  // Print Our IP Address
   char ipAddressString[16];
   do
   { // Keep trying to connect  until it works
