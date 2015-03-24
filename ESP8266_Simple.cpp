@@ -25,11 +25,6 @@
 
 #include <Arduino.h>
 #include <SoftwareSerial.h>
-// PLEASE NOTE!
-// The Arduino IDE is a bit braindead, even though we include SoftwareSerial.h here, it does nothing
-// you must include SoftwareSerial.h in your main sketch, the Arduino IDE will not include Wire
-// in the build process otherwise.
-
 #include "ESP8266_Simple.h"
 #include "ESP8266_Serial.h"
 

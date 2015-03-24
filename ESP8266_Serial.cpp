@@ -32,7 +32,7 @@
 
 size_t ESP8266_Serial::readBytesUntilAndIncluding(char terminator, char *buffer, size_t length, byte maxOneLineOnly)
 {
-    if (length < 1) return 0;
+  if (length < 1) return 0;
   size_t index = 0;
   while (index < length) {
     int c = timedRead();
@@ -44,7 +44,6 @@ size_t ESP8266_Serial::readBytesUntilAndIncluding(char terminator, char *buffer,
   }
   return index; // return number of characters, not including null terminator
 }
-
 
 // Waits until data becomes available, or a timeout occurs
 int ESP8266_Serial::waitUntilAvailable(unsigned long maxWaitTime)
@@ -59,4 +58,3 @@ int ESP8266_Serial::waitUntilAvailable(unsigned long maxWaitTime)
   
   return c;
 }
-
