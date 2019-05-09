@@ -169,7 +169,7 @@ class ESP8266_Simple
         byte startHttpServer(unsigned int port, unsigned long (* requestHandler)(char *buffer, int bufferLength), unsigned int maxBufferSize = 250);
         byte stopHttpServer();
 
-        // Implements a naieve HTTP server. When a get request comes in, it it passed to
+        // Implements a naive HTTP server. When a get request comes in, it it passed to
         // a callback function, this callback function should examine the contents of 
         //  the buffer[0..requestLength-1] 
         //  if can then write a response into the buffer[0..bufferLength-1]
