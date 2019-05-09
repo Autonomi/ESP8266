@@ -141,7 +141,7 @@ void loop()
   // Now let's interpret the response code
   if(httpResponseCode == 200 || httpResponseCode == ESP8266_OK)
   {
-    // Our request was successfull and the response can be found in the buffer
+    // Our request was successful and the response can be found in the buffer
     Serial.println("OK");
     Serial.println(buffer);
   }

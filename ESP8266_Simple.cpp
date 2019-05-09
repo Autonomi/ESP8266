@@ -730,7 +730,7 @@ unsigned int ESP8266_Simple::readIPD(
 
             // The first time round, lineNumber will still be zero
             if(lineNumber == -1) {
-                // First line of first packet should be status code (hopefully nobody out there has preceeding whitespace)
+                // First line of first packet should be status code (hopefully nobody out there has preceding whitespace)
                 if(parseHttpResponse) {
                     if(strcmp_P(responseBuffer, PSTR("HTTP/")) == 0) {
                         *parseHttpResponse = atoi(responseBuffer+9); // 9 == strlen("HTTP/1.1 ")
@@ -789,7 +789,7 @@ unsigned int ESP8266_Simple::readIPD(
             }
           
             // A "negative" bodyResponseOnlyFromLine means skip this many headers and then include the rest 
-            // provided that headers are avalable (which will be the case only if httpHost is defined)      
+            // provided that headers are available (which will be the case only if httpHost is defined)      
             // if we have not reached the minimum line yet, empty the buffer
             else if( abs(bodyResponseOnlyFromLine) > lineNumber) {
                 /*
@@ -1044,7 +1044,7 @@ byte ESP8266_Simple::sendCommand(
                     if(strncmp_P(statusBuffer, PSTR("ready"),    5) == 0) return ESP8266_READY;            
                     if(strncmp_P(statusBuffer, PSTR("busy"),     4) == 0) return ESP8266_BUSY;    
                     if(strncmp_P(statusBuffer, PSTR("Unlink"),   6) == 0) return ESP8266_OK;
-                    if(strncmp_P(statusBuffer, PSTR("Link is builded"), 15) == 0) return ESP8266_OK;
+                    if(strncmp_P(statusBuffer, PSTR("Link is built"), 15) == 0) return ESP8266_OK;
           
                     // If we are using a response buffer, and we have reached the start line
                     // requested (defaults to line 1)        
